@@ -17,7 +17,6 @@ export class AsyncQueue {
 
   private takeFirst() {
     const [first] = this.queue.splice(0, 1);
-
     return first;
   }
 

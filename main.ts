@@ -1,26 +1,5 @@
 import { AsyncQueue } from "./AsyncQueue";
 
-function promise1() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve("first"), 3000);
-  });
-}
-function promise2() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve("second"), 2000);
-  });
-}
-function promise3() {
-  return new Promise((_resolve, reject) => {
-    reject(new Error("NOOO"));
-  });
-}
-function promise4() {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve("fourth"), 5000);
-  });
-}
-
 async function main() {
   const asyncQueue = new AsyncQueue();
 
@@ -31,7 +10,10 @@ async function main() {
     console.log("promise2 finished", { error, result });
   });
   asyncQueue.push(promise3, (error, result) => {
-    console.log("promise3 finished", { error, result });
+    console.log("promise3 finished", {
+      error: { name: error?.name, message: error?.message },
+      result,
+    });
   });
   asyncQueue.push(promise4, (error, result) => {
     console.log("promise4 finished", { error, result });
@@ -39,3 +21,27 @@ async function main() {
 }
 
 main();
+
+function promise1() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("first"), 3000);
+  });
+}
+
+function promise2() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("second"), 2000);
+  });
+}
+
+function promise3() {
+  return new Promise((_resolve, reject) => {
+    reject(new Error("NOOO"));
+  });
+}
+
+function promise4() {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve("fourth"), 5000);
+  });
+}
