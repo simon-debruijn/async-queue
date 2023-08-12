@@ -1,22 +1,13 @@
 import { AsyncQueue } from "./AsyncQueue";
+import type { Callback } from "./AsyncQueue";
 
 async function main() {
   const asyncQueue = new AsyncQueue();
 
-  asyncQueue.push(promise1, (error, result) => {
-    console.log("promise1 finished", { error, result });
-  });
-  asyncQueue.push(promise2, (error, result) => {
-    console.log("promise2 finished", { error, result });
-  });
-  asyncQueue.push(promise3, (error, result) => {
-    console.log("promise3 finished", {
-      error: { name: error?.name, message: error?.message },
-      result,
-    });
-  });
-  asyncQueue.push(promise4, (error, result) => {
-    console.log("promise4 finished", { error, result });
+  const promises = [promise1, promise2, promise3, promise4];
+
+  promises.forEach((promise) => {
+    asyncQueue.push(promise, createCallback(promise.name));
   });
 }
 
@@ -44,4 +35,13 @@ function promise4() {
   return new Promise((resolve) => {
     setTimeout(() => resolve("fourth"), 5000);
   });
+}
+
+function createCallback(name: string): Callback {
+  return function (error, result) {
+    console.log(`${name} finished`, {
+      error: error ? { message: error.message } : null,
+      result,
+    });
+  };
 }

@@ -1,4 +1,4 @@
-type Callback = (error: Error | null, result: unknown | null) => void;
+export type Callback = (error: Error | null, result: unknown | null) => void;
 type PromiseFunc = (...args: any[]) => Promise<unknown>;
 type PromiseFuncCallbackPair = readonly [PromiseFunc, Callback];
 
